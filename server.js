@@ -1,9 +1,20 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
-app.use(cors());
+const whiteList = ['http://localhost:3000']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
 	res.send("Hello World!");
