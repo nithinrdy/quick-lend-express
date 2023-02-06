@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import User from "../models/User";
 import jwt from "jsonwebtoken";
+import { UserInfo } from "../interfaces/userInfoModel";
 
 const handleRegistration = async (req: Request, res: Response) => {
 	const {
@@ -32,6 +33,20 @@ const handleRegistration = async (req: Request, res: Response) => {
 	}
 	try {
 		const hashedPassword = await bcrypt.hash(registerPassword, 10);
+		const accessToken = jwt.sign(
+			{ email: registerEmail },
+			process.env.ACCESS_TOKEN_SECRET!,
+			{
+				expiresIn: "1d",
+			}
+		);
+		const refreshToken = jwt.sign(
+			{ email: registerEmail },
+			process.env.REFRESH_TOKEN_SECRET!,
+			{
+				expiresIn: "30d",
+			}
+		);
 		const newUser = new User({
 			email: registerEmail,
 			username: registerUsername,
@@ -41,11 +56,23 @@ const handleRegistration = async (req: Request, res: Response) => {
 			phoneNumber: registerPhoneNumber,
 		});
 
-		const result = await newUser.save();
-		console.log(result);
-		return res
-			.status(201)
-			.json("Registration successful for " + registerUsername + "!");
+		await newUser.save();
+		res.cookie("refreshToken", refreshToken, {
+			httpOnly: true,
+			sameSite: "none",
+			secure: true,
+		});
+		return res.status(201).json({
+			message: "Registration successful for " + registerUsername + "!",
+			user: {
+				accessToken: accessToken,
+				username: registerUsername,
+				firstName: registerFirstName,
+				lastName: registerLastName,
+				phoneNumber: registerPhoneNumber,
+				email: registerEmail,
+			} as UserInfo,
+		});
 	} catch (err) {
 		return res.status(500).json(err);
 	}
@@ -90,9 +117,17 @@ const handleLogin = async (req: Request, res: Response) => {
 		sameSite: "none",
 		secure: true,
 	});
-	return res
-		.status(200)
-		.json({ message: "Sign in successful", accessToken: accessToken });
+	return res.status(200).json({
+		message: "Sign in successful",
+		user: {
+			accessToken: accessToken,
+			username: userExists.username,
+			firstName: userExists.firstName,
+			lastName: userExists.lastName,
+			phoneNumber: userExists.phoneNumber,
+			email: userExists.email,
+		} as UserInfo,
+	});
 };
 
 export { handleRegistration, handleLogin };

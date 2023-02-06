@@ -7,7 +7,8 @@ export interface IUser extends mongoose.Document {
 	firstName: string;
 	lastName: string;
 	phoneNumber: string;
-	community: string;
+	community?: string;
+	refreshToken?: string;
 }
 
 const UserSchema: Schema = new Schema({
