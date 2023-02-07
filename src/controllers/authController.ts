@@ -34,14 +34,14 @@ const handleRegistration = async (req: Request, res: Response) => {
 	try {
 		const hashedPassword = await bcrypt.hash(registerPassword, 10);
 		const accessToken = jwt.sign(
-			{ email: registerEmail },
+			{ username: registerUsername },
 			process.env.ACCESS_TOKEN_SECRET!,
 			{
 				expiresIn: "1d",
 			}
 		);
 		const refreshToken = jwt.sign(
-			{ email: registerEmail },
+			{ username: registerUsername },
 			process.env.REFRESH_TOKEN_SECRET!,
 			{
 				expiresIn: "30d",
@@ -95,14 +95,14 @@ const handleLogin = async (req: Request, res: Response) => {
 		return res.status(401).json("Incorrect password");
 	}
 	const accessToken = jwt.sign(
-		{ email: userExists.email },
+		{ username: userExists.username },
 		process.env.ACCESS_TOKEN_SECRET!,
 		{
-			expiresIn: "1d",
+			expiresIn: "15s",
 		}
 	);
 	const refreshToken = jwt.sign(
-		{ email: userExists.email },
+		{ username: userExists.username },
 		process.env.REFRESH_TOKEN_SECRET!,
 		{
 			expiresIn: "30d",
