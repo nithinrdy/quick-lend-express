@@ -1,14 +1,18 @@
 import express from "express";
-import cors from "cors";
-import corsOptions from "./config/cors";
-import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import mongoose from "mongoose";
 import connectToDb from "./config/dbConn";
+
+// Middleware
+import cors from "cors";
+import corsOptions from "./config/cors";
+import cookieParser from "cookie-parser";
 import jwtAuth from "./middleware/jwtAuth";
+
 // Routes
 import userAuthRouter from "./routes/userAuth";
-import tokenRefresh from "./routes/tokenRefresh";
+import tokenRefreshRouter from "./routes/tokenRefresh";
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -20,7 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/user", userAuthRouter);
-app.use("/api/refresh", tokenRefresh);
+app.use("/api/refresh", tokenRefreshRouter);
 
 app.use(jwtAuth);
 
