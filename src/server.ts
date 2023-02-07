@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import mongoose from "mongoose";
 import connectToDb from "./config/dbConn";
+import jwtAuth from "./middleware/jwtAuth";
 // Routes
 import userAuthRouter from "./routes/userAuth";
 const app = express();
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/user", userAuthRouter);
+
+app.use(jwtAuth);
 
 app.get("/", (req, res) => {
 	res.send("Hello World!");
