@@ -130,4 +130,31 @@ const handleLogin = async (req: Request, res: Response) => {
 	});
 };
 
-export { handleRegistration, handleLogin };
+const handleLogout = async (req: Request, res: Response) => {
+	const refreshToken: string = req.cookies ? req.cookies.refreshToken : null;
+	if (!refreshToken) {
+		return res.sendStatus(204);
+	}
+	res.clearCookie("refreshToken", {
+		httpOnly: true,
+		sameSite: "none",
+		secure: true,
+	});
+
+	User.findOne({ refreshToken: refreshToken }).exec((err, user) => {
+		if (err) {
+			return res.status(500).json(err);
+		}
+		if (!user) {
+			return res.status(204);
+		}
+		user
+			.updateOne({ refreshToken: "" })
+			.exec()
+			.then(() => {
+				return res.sendStatus(204);
+			});
+	});
+};
+
+export { handleRegistration, handleLogin, handleLogout };
