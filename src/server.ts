@@ -8,6 +8,7 @@ import connectToDb from "./config/dbConn";
 import jwtAuth from "./middleware/jwtAuth";
 // Routes
 import userAuthRouter from "./routes/userAuth";
+import tokenRefresh from "./routes/tokenRefresh";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/user", userAuthRouter);
+app.use("/api/refresh", tokenRefresh);
 
 app.use(jwtAuth);
 
