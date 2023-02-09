@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import User from "../models/User";
-import { UserInfo } from "../interfaces/userInfoModel";
 
 interface DecodedJwt {
 	username: string;
@@ -47,7 +46,8 @@ export const handleTokenRefresh = (req: Request, res: Response) => {
 				lastName: user.lastName,
 				phoneNumber: user.phoneNumber,
 				email: user.email,
-			} as UserInfo,
+				community: user.community,
+			},
 		});
 	});
 };

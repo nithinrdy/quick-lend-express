@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import User from "../models/User";
 import jwt from "jsonwebtoken";
-import { UserInfo } from "../interfaces/userInfoModel";
 
 const handleRegistration = async (req: Request, res: Response) => {
 	const {
@@ -54,6 +53,8 @@ const handleRegistration = async (req: Request, res: Response) => {
 			firstName: registerFirstName,
 			lastName: registerLastName,
 			phoneNumber: registerPhoneNumber,
+			refreshToken: refreshToken,
+			community: "",
 		});
 
 		await newUser.save();
@@ -71,7 +72,8 @@ const handleRegistration = async (req: Request, res: Response) => {
 				lastName: registerLastName,
 				phoneNumber: registerPhoneNumber,
 				email: registerEmail,
-			} as UserInfo,
+				community: "",
+			},
 		});
 	} catch (err) {
 		return res.status(500).json(err);
@@ -126,7 +128,8 @@ const handleLogin = async (req: Request, res: Response) => {
 			lastName: userExists.lastName,
 			phoneNumber: userExists.phoneNumber,
 			email: userExists.email,
-		} as UserInfo,
+			community: userExists.community,
+		},
 	});
 };
 
