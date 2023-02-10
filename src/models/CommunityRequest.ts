@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-export interface IRequest extends mongoose.Document {
+export interface ICommunityRequest extends mongoose.Document {
 	creatorUsername: string;
 	acceptorUsername: string;
 	requestDescription: string;
@@ -12,7 +12,7 @@ export interface IRequest extends mongoose.Document {
 	cancelled: boolean;
 }
 
-const RequestSchema: Schema = new Schema(
+const CommunityRequestSchema: Schema = new Schema(
 	{
 		creatorUsername: { type: String, required: true },
 		acceptorUsername: { type: String, required: true },
@@ -29,4 +29,7 @@ const RequestSchema: Schema = new Schema(
 	}
 );
 
-export default mongoose.model<IRequest>("Request", RequestSchema);
+export default mongoose.model<ICommunityRequest>(
+	"Request",
+	CommunityRequestSchema
+);
