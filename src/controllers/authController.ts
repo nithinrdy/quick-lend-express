@@ -110,27 +110,32 @@ const handleLogin = async (req: Request, res: Response) => {
 			expiresIn: "30d",
 		}
 	);
-	await User.updateOne(
-		{ email: loginEmail },
-		{ refreshToken: refreshToken }
-	).exec();
-	res.cookie("refreshToken", refreshToken, {
-		httpOnly: true,
-		sameSite: "none",
-		secure: true,
-	});
-	return res.status(200).json({
-		message: "Sign in successful",
-		user: {
-			accessToken: accessToken,
-			username: userExists.username,
-			firstName: userExists.firstName,
-			lastName: userExists.lastName,
-			phoneNumber: userExists.phoneNumber,
-			email: userExists.email,
-			community: userExists.community,
-		},
-	});
+
+	try {
+		await User.updateOne(
+			{ email: loginEmail },
+			{ refreshToken: refreshToken }
+		).exec();
+		res.cookie("refreshToken", refreshToken, {
+			httpOnly: true,
+			sameSite: "none",
+			secure: true,
+		});
+		return res.status(200).json({
+			message: "Sign in successful",
+			user: {
+				accessToken: accessToken,
+				username: userExists.username,
+				firstName: userExists.firstName,
+				lastName: userExists.lastName,
+				phoneNumber: userExists.phoneNumber,
+				email: userExists.email,
+				community: userExists.community,
+			},
+		});
+	} catch (err) {
+		return res.status(500).json(err);
+	}
 };
 
 const handleLogout = async (req: Request, res: Response) => {
@@ -144,20 +149,24 @@ const handleLogout = async (req: Request, res: Response) => {
 		secure: true,
 	});
 
-	User.findOne({ refreshToken: refreshToken }).exec((err, user) => {
-		if (err) {
-			return res.status(500).json(err);
-		}
-		if (!user) {
-			return res.status(204);
-		}
-		user
-			.updateOne({ refreshToken: "" })
-			.exec()
-			.then(() => {
-				return res.sendStatus(204);
-			});
-	});
+	try {
+		User.findOne({ refreshToken: refreshToken }).exec((err, user) => {
+			if (err) {
+				return res.status(500).json(err);
+			}
+			if (!user) {
+				return res.status(204);
+			}
+			user
+				.updateOne({ refreshToken: "" })
+				.exec()
+				.then(() => {
+					return res.sendStatus(204);
+				});
+		});
+	} catch (err) {
+		return res.status(500).json(err);
+	}
 };
 
 export { handleRegistration, handleLogin, handleLogout };
