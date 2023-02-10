@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import CommunityRequest from "../models/CommunityRequest";
 
 export const handleRequestCreation = async (req: Request, res: Response) => {
-	console.log("handleRequestCreation called");
 	const {
 		username,
 		requestDescription,
@@ -11,15 +10,6 @@ export const handleRequestCreation = async (req: Request, res: Response) => {
 		requestLongitude,
 		community,
 	} = req.body;
-
-	console.log({
-		username,
-		requestDescription,
-		location,
-		requestLatitude,
-		requestLongitude,
-		community,
-	});
 
 	const newRequest = new CommunityRequest({
 		creatorUsername: username,
@@ -36,6 +26,25 @@ export const handleRequestCreation = async (req: Request, res: Response) => {
 	try {
 		await newRequest.save();
 		return res.status(201).json("Request created successfully");
+	} catch (err) {
+		return res.status(500).json(err);
+	}
+};
+
+export const handleFetchRequests = async (req: Request, res: Response) => {
+	const { community } = req.body;
+
+	if (!community) {
+		return res.status(400).json("Community not provided/invalid");
+	}
+
+	try {
+		const requests = await CommunityRequest.find({
+			community: community,
+		})
+			.sort({ createdAt: -1 })
+			.exec();
+		return res.status(200).json(requests);
 	} catch (err) {
 		return res.status(500).json(err);
 	}

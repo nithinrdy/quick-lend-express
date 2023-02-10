@@ -1,8 +1,12 @@
-import { Router } from 'express';
-import { handleRequestCreation } from '../controllers/createRequestController';
+import { Router } from "express";
+import {
+	handleRequestCreation,
+	handleFetchRequests,
+} from "../controllers/requestController";
 
 const router = Router();
 
-router.post('/create', handleRequestCreation)
+router.post("/create", handleRequestCreation);
+router.get("/fetch", handleFetchRequests);
 
 export default router;
