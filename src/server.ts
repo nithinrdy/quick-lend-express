@@ -13,6 +13,7 @@ import jwtAuth from "./middleware/jwtAuth";
 import userAuthRouter from "./routes/userAuth";
 import tokenRefreshRouter from "./routes/tokenRefresh";
 import editProfileRouter from "./routes/editProfile";
+import requestsRouter from "./routes/requests";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -29,7 +30,8 @@ app.use("/api/refresh", tokenRefreshRouter);
 
 app.use(jwtAuth);
 
-app.use("/api/editprofile", editProfileRouter)
+app.use("/api/editprofile", editProfileRouter);
+app.use("/api/requests", requestsRouter);
 
 app.get("/", (req, res) => {
 	res.send("Hello World!");

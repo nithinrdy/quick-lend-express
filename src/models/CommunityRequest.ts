@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 export interface ICommunityRequest extends mongoose.Document {
 	creatorUsername: string;
-	acceptorUsername: string;
+	acceptorUsername?: string;
 	requestDescription: string;
 	location: string;
 	requestLatitude?: number;
@@ -15,7 +15,7 @@ export interface ICommunityRequest extends mongoose.Document {
 const CommunityRequestSchema: Schema = new Schema(
 	{
 		creatorUsername: { type: String, required: true },
-		acceptorUsername: { type: String, required: true },
+		acceptorUsername: { type: String },
 		requestDescription: { type: String, required: true },
 		location: { type: String, required: true },
 		requestLatitude: { type: Number },
