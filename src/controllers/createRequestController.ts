@@ -23,7 +23,7 @@ export const handleRequestCreation = async (req: Request, res: Response) => {
 
 	const newRequest = new CommunityRequest({
 		creatorUsername: username,
-		acceptorUsername: undefined,
+		acceptorUsername: null,
 		requestDescription,
 		location,
 		requestLatitude,
