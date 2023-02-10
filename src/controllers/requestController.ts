@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import CommunityRequest from "../models/CommunityRequest";
+import User from "../models/User";
 
 export const handleRequestCreation = async (req: Request, res: Response) => {
 	const {
@@ -32,13 +33,17 @@ export const handleRequestCreation = async (req: Request, res: Response) => {
 };
 
 export const handleFetchRequests = async (req: Request, res: Response) => {
-	const { community } = req.body;
-
-	if (!community) {
-		return res.status(400).json("Community not provided/invalid");
+	const { username } = req.body;
+	if (!username) {
+		return res.status(400).json("Invalid request");
 	}
 
 	try {
+		const user = await User.findOne({ username: username }).exec();
+		if (!user) {
+			return res.status(400).json("Invalid request");
+		}
+		const community = user.community;
 		const requests = await CommunityRequest.find({
 			community: community,
 		})
