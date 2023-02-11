@@ -98,12 +98,10 @@ export const handleFetchRequestDetails = async (
 				return res.status(400).json("Could not find creator user");
 			}
 			contactNumber = user.phoneNumber;
-		} else {
-			console.log("is it dis one");
-			return res.status(400).json("Invalid request");
 		}
 
 		const responseData = {
+			_id: communityRequest._id,
 			creatorUsername: communityRequest.creatorUsername,
 			acceptorUsername: communityRequest.acceptorUsername,
 			requestDescription: communityRequest.requestDescription,
