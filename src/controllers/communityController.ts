@@ -35,3 +35,18 @@ export const handleCommunityCreation = async (req: Request, res: Response) => {
 		res.status(500).json(err);
 	}
 };
+
+export const handleFetchCommunities = async (req: Request, res: Response) => {
+	try {
+		const communities = await Community.find().exec();
+
+		res
+			.status(200)
+			.json({
+				message: "Communities fetched successfully.",
+				communities: communities,
+			});
+	} catch (err) {
+		res.status(500).json(err);
+	}
+};
