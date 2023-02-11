@@ -14,6 +14,7 @@ import userAuthRouter from "./routes/userAuth";
 import tokenRefreshRouter from "./routes/tokenRefresh";
 import editProfileRouter from "./routes/editProfile";
 import requestsRouter from "./routes/requests";
+import communityRouter from "./routes/communities";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -32,6 +33,7 @@ app.use(jwtAuth);
 
 app.use("/api/editprofile", editProfileRouter);
 app.use("/api/requests", requestsRouter);
+app.use("/api/communities", communityRouter);
 
 app.get("/", (req, res) => {
 	res.send("Hello World!");
