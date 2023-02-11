@@ -3,6 +3,15 @@ import Community from "../models/Community";
 
 export const handleCommunityCreation = async (req: Request, res: Response) => {
 	const { id, name, description, latitude, longitude } = req.body;
+	const { username } = req.body;
+
+	if (!id || !name || !description || !latitude || !longitude) {
+		return res.status(400).json("All fields are required.");
+	}
+
+	if (username !== "admin") {
+		return res.status(401).json("Unauthorized.");
+	}
 
 	try {
 		const community = await Community.findOne({ communityId: id }).exec();
