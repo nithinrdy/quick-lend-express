@@ -1,0 +1,9 @@
+/.git
+.gitignore
+.env
+
+.prettierrc
+README.md
+
+/build
+/node_modules
