@@ -8,3 +8,11 @@ Built using ExpressJS & Mongoose.
 - Clone the repository
 - Install the dependencies listed in package.json using `npm install`
 - Run the app using `npm start`
+
+## Using Docker
+
+- Clone the repo
+- Build the image using `docker build -t <image_name>`.
+- Create a file containing the following environment variables: `ACCESS_TOKEN_SECRET`, `REFRESH_TOKEN_SECRET` & `DATABASE_URI` with suitable values assigned to them, separated by newlines.
+- Run the container using `docker run -d -p <any_open_port>:4000 --env-file <the_env_variable_file_you_just_created> <image_name>` (-d to run it in detached mode).
+- The server should now be running on `http://localhost:<the_open_port_you_used_above>/`.
