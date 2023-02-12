@@ -1,7 +1,8 @@
-# quick-lend-express
+# Quick-lend
+
 The express server for quick-lend. Allows users to put up requests for day-to-day utilities (like chargers, and other electronic devices) to quickly borrow/lend items within a small community.
 
-Built using ExpressJS & Mongoose.
+Built using ExpressJS & Mongoose (take a look at src/models to see the schemas used and the collections you should set up).
 
 ## Installation
 
