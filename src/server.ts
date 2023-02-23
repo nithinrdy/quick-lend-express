@@ -8,6 +8,7 @@ import cors from "cors";
 import corsOptions from "./config/cors";
 import cookieParser from "cookie-parser";
 import jwtAuth from "./middleware/jwtAuth";
+import allowCORS from "./middleware/allowCORS";
 
 // Routes
 import userAuthRouter from "./routes/userAuth";
@@ -25,6 +26,7 @@ connectToDb();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+app.use(allowCORS);
 
 app.use("/api/user", userAuthRouter);
 app.use("/api/refresh", tokenRefreshRouter);
